@@ -1,5 +1,10 @@
-// Obtendo referência para o elemento <h2> com a classe "temperature-viewer"
 const temperatureViewer = document.querySelector('.temperature-viewer');
+const greetingElement = document.querySelector('.greeting');
+const searchInput = document.getElementById('search-input');
+const resultsList = document.getElementById('results-list');
+const overlay = document.createElement('div');
+overlay.id = 'overlay';
+document.body.appendChild(overlay);
 
 // Função para buscar a temperatura atual usando a API OpenWeatherMap
 function getTemperatureByLocation(latitude, longitude) {
@@ -41,9 +46,6 @@ function getLocation() {
 // Chamada da função para obter a temperatura atual pela localização
 getLocation();
 
-// Obtendo referência para o elemento <h1> com a classe "greeting"
-const greetingElement = document.querySelector('.greeting');
-
 // Função para obter o horário atual em Brasília
 function getCurrentTime() {
   const date = new Date();
@@ -67,17 +69,6 @@ function displayGreeting() {
 // Chamada da função para exibir a saudação atual
 displayGreeting();
 
-const searchInput = document.getElementById('search-input');
-const resultsList = document.getElementById('results-list');
-const websites = [
-  { name: 'Google', url: 'https://www.google.com' },
-  { name: 'YouTube', url: 'https://www.youtube.com' },
-  { name: 'Facebook', url: 'https://www.facebook.com' },
-  // Adicione mais sites ao array conforme necessário
-];
-
-searchInput.addEventListener('input', handleSearch);
-
 function handleSearch() {
   const searchTerm = searchInput.value.toLowerCase();
   const filteredWebsites = websites.filter(website =>
@@ -85,6 +76,12 @@ function handleSearch() {
   );
 
   displayResults(filteredWebsites);
+
+  if (searchTerm.trim() !== '') {
+    overlay.classList.add('active');
+  } else {
+    overlay.classList.remove('active');
+  }
 }
 
 function displayResults(filteredWebsites) {
@@ -99,3 +96,33 @@ function displayResults(filteredWebsites) {
     resultsList.appendChild(li);
   });
 }
+
+
+
+
+
+
+
+
+
+
+// Função para aplicar a classe 'active' aos elementos, exceto #search-container, quando o campo de pesquisa recebe o foco
+function handleSearchFocus() {
+  const elements = document.querySelectorAll(`#${overlay.id} > :not(#search-container)`);
+  elements.forEach(element => {
+    element.classList.add('active'); // Adiciona a classe 'active' aos elementos
+  });
+}
+
+// Função para remover a classe 'active' dos elementos, exceto #search-container, quando o campo de pesquisa perde o foco
+function handleSearchBlur() {
+  const elements = document.querySelectorAll(`#${overlay.id} > :not(#search-container)`);
+  elements.forEach(element => {
+    element.classList.remove('active'); // Remove a classe 'active' dos elementos
+  });
+}
+
+// Adiciona os event listeners para os eventos de input, focus e blur no campo de pesquisa
+searchInput.addEventListener('input', handleSearch);
+searchInput.addEventListener('focus', handleSearchFocus);
+searchInput.addEventListener('blur', handleSearchBlur);
