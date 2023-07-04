@@ -97,15 +97,6 @@ function displayResults(filteredWebsites) {
   });
 }
 
-
-
-
-
-
-
-
-
-
 // Função para aplicar a classe 'active' aos elementos, exceto #search-container, quando o campo de pesquisa recebe o foco
 function handleSearchFocus() {
   const elements = document.querySelectorAll(`#${overlay.id} > :not(#search-container)`);
